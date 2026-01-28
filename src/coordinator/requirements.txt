@@ -10,7 +10,7 @@ SQLAlchemy==2.0.23
 alembic==1.13.0
 
 # Redis (Job Queue)
-redis==5.0.1
+redis==7.1.0
 rq==1.15.1
 
 # HTTP Client (for model downloads)
