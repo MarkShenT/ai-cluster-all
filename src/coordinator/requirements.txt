@@ -26,4 +26,4 @@ python-dotenv==1.0.0
 psutil==5.9.7
 
 # Production WSGI
-gunicorn==21.2.0
+gunicorn==24.1.1
