@@ -102,10 +102,20 @@ cd src/frontend
 npm run lint
 ```
 
+## Branching Strategy
+
+- **main** - Production branch, manually merged from develop
+- **develop** - Integration branch for features and dependency updates
+- **feature/*** - Feature branches, merged to develop
+
+Dependabot PRs target `develop` branch. Maintainers merge `develop` to `main` for releases.
+
 ## Pull Request Process
 
-1. **Create a feature branch:**
+1. **Create a feature branch from develop:**
    ```bash
+   git checkout develop
+   git pull origin develop
    git checkout -b feature/your-feature-name
    ```
 
@@ -121,19 +131,12 @@ npm run lint
    cd src/frontend && npm test -- --run
    ```
 
-4. **Ensure code style is correct:**
-   ```bash
-   black --check src/ tests/
-   isort --check-only src/ tests/
-   flake8 src/ tests/ --max-line-length=120
-   ```
-
-5. **Push and create a pull request:**
+4. **Push and create a pull request to develop:**
    ```bash
    git push origin feature/your-feature-name
    ```
 
-6. **Fill out the PR template** with:
+5. **Fill out the PR template** with:
    - Description of changes
    - Related issue number (if applicable)
    - Test plan
@@ -143,9 +146,8 @@ npm run lint
 All pull requests trigger the CI workflow which runs:
 
 - Python tests for coordinator and worker
-- Frontend build and lint
+- Frontend build
 - Docker build verification
-- Security scanning
 
 PRs must pass all CI checks before merging.
 

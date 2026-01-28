@@ -182,10 +182,12 @@ npm run test:coverage
 
 ### CI/CD
 
-GitHub Actions runs on push/PR to main (`ci.yml`):
+GitHub Actions runs on push/PR to `main` and `develop` branches:
 - Python tests (coordinator + worker)
 - Frontend build
 - Docker image builds
+
+**Branching**: Feature branches → `develop` → `main`. Dependabot targets `develop`.
 
 ### Code Quality
 
