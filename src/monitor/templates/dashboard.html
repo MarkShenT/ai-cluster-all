@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="refresh" content="{{ poll_interval }}">
+    <title>AI Cluster Monitor</title>
+    <style>
+        :root {
+            --bg-primary: #0f172a;
+            --bg-secondary: #1e293b;
+            --bg-tertiary: #334155;
+            --text-primary: #f1f5f9;
+            --text-secondary: #94a3b8;
+            --accent-blue: #3b82f6;
+            --accent-green: #22c55e;
+            --accent-yellow: #eab308;
+            --accent-red: #ef4444;
+            --accent-purple: #a855f7;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            padding: 1.5rem;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--bg-tertiary);
+        }
+
+        h1 {
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            border-radius: 9999px;
+            font-size: 0.875rem;
+            font-weight: 500;
+        }
+
+        .status-badge.healthy {
+            background: rgba(34, 197, 94, 0.2);
+            color: var(--accent-green);
+        }
+
+        .status-badge.error, .status-badge.offline {
+            background: rgba(239, 68, 68, 0.2);
+            color: var(--accent-red);
+        }
+
+        .status-badge.unknown {
+            background: rgba(234, 179, 8, 0.2);
+            color: var(--accent-yellow);
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        .status-dot.healthy { background: var(--accent-green); }
+        .status-dot.error, .status-dot.offline { background: var(--accent-red); }
+        .status-dot.unknown { background: var(--accent-yellow); }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .card {
+            background: var(--bg-secondary);
+            border-radius: 0.75rem;
+            padding: 1.25rem;
+            border: 1px solid var(--bg-tertiary);
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .card-title {
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            line-height: 1;
+        }
+
+        .stat-label {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            margin-top: 0.25rem;
+        }
+
+        .stat-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+        }
+
+        .stat-item {
+            text-align: center;
+            padding: 0.75rem;
+            background: var(--bg-tertiary);
+            border-radius: 0.5rem;
+        }
+
+        .stat-item .value {
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .stat-item .label {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            margin-top: 0.25rem;
+        }
+
+        .stat-item.queued .value { color: var(--accent-yellow); }
+        .stat-item.running .value { color: var(--accent-blue); }
+        .stat-item.completed .value { color: var(--accent-green); }
+        .stat-item.failed .value { color: var(--accent-red); }
+
+        .worker-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .worker-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.75rem;
+            background: var(--bg-tertiary);
+            border-radius: 0.5rem;
+        }
+
+        .worker-info {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .worker-status {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+        }
+
+        .worker-status.online, .worker-status.idle { background: var(--accent-green); }
+        .worker-status.busy { background: var(--accent-blue); animation: pulse 1s infinite; }
+        .worker-status.offline { background: var(--accent-red); }
+
+        .worker-name {
+            font-weight: 500;
+        }
+
+        .worker-details {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+        }
+
+        .gpu-badge {
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.25rem;
+            font-size: 0.75rem;
+            font-weight: 500;
+            text-transform: uppercase;
+        }
+
+        .gpu-badge.cuda { background: rgba(34, 197, 94, 0.2); color: var(--accent-green); }
+        .gpu-badge.metal { background: rgba(168, 85, 247, 0.2); color: var(--accent-purple); }
+        .gpu-badge.cpu { background: rgba(59, 130, 246, 0.2); color: var(--accent-blue); }
+
+        .job-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .job-item {
+            display: grid;
+            grid-template-columns: auto 1fr auto auto;
+            gap: 0.75rem;
+            align-items: center;
+            padding: 0.5rem 0.75rem;
+            background: var(--bg-tertiary);
+            border-radius: 0.375rem;
+            font-size: 0.875rem;
+        }
+
+        .job-time {
+            color: var(--text-secondary);
+            font-size: 0.75rem;
+            font-family: monospace;
+        }
+
+        .job-model {
+            font-weight: 500;
+        }
+
+        .job-status {
+            padding: 0.125rem 0.5rem;
+            border-radius: 0.25rem;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+
+        .job-status.completed { background: rgba(34, 197, 94, 0.2); color: var(--accent-green); }
+        .job-status.running { background: rgba(59, 130, 246, 0.2); color: var(--accent-blue); }
+        .job-status.queued { background: rgba(234, 179, 8, 0.2); color: var(--accent-yellow); }
+        .job-status.failed { background: rgba(239, 68, 68, 0.2); color: var(--accent-red); }
+
+        .job-duration {
+            color: var(--text-secondary);
+            font-size: 0.75rem;
+            font-family: monospace;
+        }
+
+        .model-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .model-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.5rem 0.75rem;
+            background: var(--bg-tertiary);
+            border-radius: 0.375rem;
+        }
+
+        .model-name {
+            font-weight: 500;
+        }
+
+        .model-size {
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+        }
+
+        .model-status {
+            padding: 0.125rem 0.5rem;
+            border-radius: 0.25rem;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+
+        .model-status.available { background: rgba(34, 197, 94, 0.2); color: var(--accent-green); }
+        .model-status.downloading { background: rgba(59, 130, 246, 0.2); color: var(--accent-blue); }
+        .model-status.failed { background: rgba(239, 68, 68, 0.2); color: var(--accent-red); }
+
+        .empty-state {
+            text-align: center;
+            padding: 2rem;
+            color: var(--text-secondary);
+        }
+
+        .error-banner {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            border-radius: 0.5rem;
+            padding: 1rem;
+            margin-bottom: 1.5rem;
+            color: var(--accent-red);
+        }
+
+        footer {
+            text-align: center;
+            padding-top: 1.5rem;
+            border-top: 1px solid var(--bg-tertiary);
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+        }
+
+        footer a {
+            color: var(--accent-blue);
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+
+        .timestamp {
+            font-family: monospace;
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>AI Cluster Monitor</h1>
+            <div style="display: flex; align-items: center; gap: 1rem;">
+                <span class="timestamp">Updated: {{ status.last_updated or 'Never' }}</span>
+                <span class="status-badge {{ status.coordinator.status }}">
+                    <span class="status-dot {{ status.coordinator.status }}"></span>
+                    Coordinator {{ status.coordinator.status|capitalize }}
+                </span>
+            </div>
+        </header>
+
+        {% if status.error %}
+        <div class="error-banner">
+            <strong>Error:</strong> {{ status.error }}
+        </div>
+        {% endif %}
+
+        <div class="grid">
+            <!-- Workers Card -->
+            <div class="card">
+                <div class="card-header">
+                    <span class="card-title">Workers</span>
+                    <span>{{ status.workers|selectattr('status', 'ne', 'offline')|list|length }}/{{ status.workers|length }} online</span>
+                </div>
+                {% if status.workers %}
+                <div class="worker-list">
+                    {% for worker in status.workers %}
+                    <div class="worker-item">
+                        <div class="worker-info">
+                            <span class="worker-status {{ worker.status }}"></span>
+                            <div>
+                                <div class="worker-name">{{ worker.hostname or worker.id }}</div>
+                                <div class="worker-details">
+                                    {{ worker.capabilities.ram_gb|default(0) }}GB RAM
+                                    {% if worker.current_job_id %}
+                                    &middot; Job: {{ worker.current_job_id }}
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                        <span class="gpu-badge {{ worker.capabilities.gpu.type|default('cpu') }}">
+                            {{ worker.capabilities.gpu.type|default('cpu')|upper }}
+                        </span>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% else %}
+                <div class="empty-state">No workers registered</div>
+                {% endif %}
+            </div>
+
+            <!-- Jobs Stats Card -->
+            <div class="card">
+                <div class="card-header">
+                    <span class="card-title">Job Statistics</span>
+                    <span>Total: {{ status.jobs.total }}</span>
+                </div>
+                <div class="stat-grid">
+                    <div class="stat-item queued">
+                        <div class="value">{{ status.jobs.queued }}</div>
+                        <div class="label">Queued</div>
+                    </div>
+                    <div class="stat-item running">
+                        <div class="value">{{ status.jobs.running }}</div>
+                        <div class="label">Running</div>
+                    </div>
+                    <div class="stat-item completed">
+                        <div class="value">{{ status.jobs.completed }}</div>
+                        <div class="label">Completed</div>
+                    </div>
+                    <div class="stat-item failed">
+                        <div class="value">{{ status.jobs.failed }}</div>
+                        <div class="label">Failed</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- System Health Card -->
+            <div class="card">
+                <div class="card-header">
+                    <span class="card-title">System Health</span>
+                </div>
+                <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+                    <div style="display: flex; justify-content: space-between; padding: 0.5rem 0; border-bottom: 1px solid var(--bg-tertiary);">
+                        <span>Coordinator</span>
+                        <span class="status-badge {{ status.coordinator.status }}" style="padding: 0.25rem 0.75rem; font-size: 0.75rem;">
+                            {{ status.coordinator.status|capitalize }}
+                        </span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; padding: 0.5rem 0; border-bottom: 1px solid var(--bg-tertiary);">
+                        <span>Redis</span>
+                        <span class="status-badge {{ 'healthy' if status.coordinator.services.redis == 'connected' else 'error' }}" style="padding: 0.25rem 0.75rem; font-size: 0.75rem;">
+                            {{ status.coordinator.services.redis|default('Unknown')|capitalize }}
+                        </span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; padding: 0.5rem 0; border-bottom: 1px solid var(--bg-tertiary);">
+                        <span>Database</span>
+                        <span class="status-badge {{ 'healthy' if status.coordinator.services.database == 'connected' else 'error' }}" style="padding: 0.25rem 0.75rem; font-size: 0.75rem;">
+                            {{ status.coordinator.services.database|default('Unknown')|capitalize }}
+                        </span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; padding: 0.5rem 0;">
+                        <span>API Version</span>
+                        <span style="color: var(--text-secondary);">{{ status.coordinator.version|default('Unknown') }}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Full Width Cards -->
+        <div class="grid" style="grid-template-columns: 1fr 1fr;">
+            <!-- Recent Jobs Card -->
+            <div class="card">
+                <div class="card-header">
+                    <span class="card-title">Recent Jobs</span>
+                    <span>Last 10</span>
+                </div>
+                {% if status.recent_jobs %}
+                <div class="job-list">
+                    {% for job in status.recent_jobs %}
+                    <div class="job-item">
+                        <span class="job-time">{{ job.created_at[:16] if job.created_at else 'N/A' }}</span>
+                        <span class="job-model">{{ job.model }}</span>
+                        <span class="job-status {{ job.status }}">{{ job.status|capitalize }}</span>
+                        <span class="job-duration">
+                            {% if job.duration_seconds %}{{ job.duration_seconds }}s{% else %}-{% endif %}
+                        </span>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% else %}
+                <div class="empty-state">No recent jobs</div>
+                {% endif %}
+            </div>
+
+            <!-- Models Card -->
+            <div class="card">
+                <div class="card-header">
+                    <span class="card-title">Available Models</span>
+                    <span>{{ status.models|length }} models</span>
+                </div>
+                {% if status.models %}
+                <div class="model-list">
+                    {% for model in status.models %}
+                    <div class="model-item">
+                        <div>
+                            <div class="model-name">{{ model.name or model.id }}</div>
+                            <div class="model-size">{{ "%.1f"|format(model.size_gb|default(0)) }}GB &middot; {{ model.provider|default('Unknown') }}</div>
+                        </div>
+                        <span class="model-status {{ model.status }}">
+                            {% if model.status == 'downloading' %}
+                                {{ "%.0f"|format((model.download_progress|default(0)) * 100) }}%
+                            {% else %}
+                                {{ model.status|capitalize }}
+                            {% endif %}
+                        </span>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% else %}
+                <div class="empty-state">No models downloaded</div>
+                {% endif %}
+            </div>
+        </div>
+
+        <footer>
+            <p>
+                AI Cluster Monitor &middot;
+                Coordinator: <a href="{{ coordinator_url }}">{{ coordinator_url }}</a> &middot;
+                Refresh: every {{ poll_interval }}s
+            </p>
+        </footer>
+    </div>
+
+    <script>
+        // Auto-refresh data without full page reload (optional enhancement)
+        // The meta refresh tag handles basic refresh
+        console.log('AI Cluster Monitor loaded');
+    </script>
+</body>
+</html>

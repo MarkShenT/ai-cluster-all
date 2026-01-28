@@ -1,0 +1,7 @@
+# AI Cluster Monitor - Python Dependencies
+
+# Web Framework
+Flask>=3.0.0
+
+# HTTP Client
+requests>=2.31.0

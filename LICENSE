@@ -1,0 +1,56 @@
+# AI Cluster - Dual License
+
+Copyright (c) 2025 MarkShenT
+
+This software is available under a dual license:
+
+## Option 1: GNU Affero General Public License v3.0 (AGPL-3.0)
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as published
+by the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program. If not, see <https://www.gnu.org/licenses/>.
+
+### AGPL-3.0 Summary
+
+- You may use, modify, and distribute this software freely
+- If you modify and distribute, you MUST release your source code under AGPL-3.0
+- If you run a modified version on a server (network use), you MUST provide
+  the source code to users who interact with it over the network
+- You may NOT sublicense or sell this software without releasing source code
+
+## Option 2: Commercial License
+
+For commercial use without AGPL-3.0 obligations (e.g., proprietary products,
+SaaS without source disclosure, or redistribution without open-sourcing),
+a commercial license is available.
+
+### Commercial License Benefits
+
+- Use in proprietary/closed-source products
+- No requirement to disclose source code
+- No copyleft obligations
+- Priority support available
+
+### Contact for Commercial Licensing
+
+For commercial licensing inquiries, please contact the author.
+
+---
+
+## Which License Applies?
+
+- **Open Source Projects**: Use AGPL-3.0 (free)
+- **Personal/Educational Use**: Use AGPL-3.0 (free)
+- **Commercial/Proprietary Use**: Requires Commercial License
+
+If you are unsure which license applies to your use case, please contact
+the author for clarification.

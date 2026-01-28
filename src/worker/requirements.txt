@@ -1,0 +1,13 @@
+# AI Cluster Worker - Python Dependencies
+
+# Inference Engine (install with appropriate backend)
+# For CUDA:   pip install llama-cpp-python --extra-index-url https://abetlen.github.io/llama-cpp-python/whl/cu121
+# For Metal:  CMAKE_ARGS="-DLLAMA_METAL=on" pip install llama-cpp-python
+# For CPU:    pip install llama-cpp-python
+llama-cpp-python>=0.2.0
+
+# HTTP Client
+requests>=2.31.0
+
+# System Monitoring
+psutil>=5.9.0

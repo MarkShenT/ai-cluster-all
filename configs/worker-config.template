@@ -1,0 +1,67 @@
+#===============================================================================
+# AI Cluster Worker Configuration
+#===============================================================================
+#
+# INSTRUCTIONS:
+# 1. Copy this file to the worker machine
+# 2. Rename to: worker-config.env
+# 3. Update COORDINATOR_IP if different from default
+# 4. Set API_KEY to match the coordinator's API key (from .env file)
+# 5. Run the appropriate setup script:
+#    - Windows: .\setup-worker-windows.ps1 --gpu   (or --cpu-only)
+#    - macOS:   ./setup-worker-macos.sh
+#
+# COORDINATOR LXC INFO:
+# - LXC CTID: 120
+# - LXC IP: 10.10.10.75 (default, may differ)
+# - Proxmox Host: 10.10.10.5 (DO NOT USE THIS for workers!)
+#
+# To check coordinator LXC IP from Proxmox:
+#   ssh root@10.10.10.5
+#   pct exec 120 -- hostname -I
+#
+# SECURITY:
+# - API_KEY is REQUIRED for workers to communicate with coordinator
+# - Get the API key from the coordinator's .env file
+# - All API requests will fail without a valid API key
+#
+#===============================================================================
+
+# Coordinator connection (LXC IP, not Proxmox host IP!)
+COORDINATOR_IP=10.10.10.75
+COORDINATOR_PORT=80
+
+# API Authentication (REQUIRED - copy from coordinator's .env file)
+API_KEY=your-api-key-here
+
+# Worker identification (leave empty to auto-detect from hostname)
+WORKER_ID=
+
+# GPU type override (auto-detected by default)
+# Options: auto, cuda, metal, cpu
+GPU_TYPE=auto
+
+# Worker capabilities (comma-separated)
+# Options: inference, image, video
+WORKER_TYPES=inference
+
+#===============================================================================
+# NETWORK TROUBLESHOOTING:
+#===============================================================================
+# If worker can't connect to coordinator:
+#
+# 1. Verify LXC is running:
+#    ssh root@10.10.10.5
+#    pct status 120
+#
+# 2. Check LXC IP address:
+#    pct exec 120 -- hostname -I
+#
+# 3. Test connectivity from worker:
+#    curl http://10.10.10.75/api/v1/system/health
+#
+# 4. Ensure coordinator services are running:
+#    pct enter 120
+#    docker compose ps
+#
+#===============================================================================

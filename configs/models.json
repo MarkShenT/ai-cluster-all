@@ -1,0 +1,227 @@
+{
+  "providers": {
+    "deepseek": {
+      "name": "DeepSeek Coder",
+      "description": "High-quality code generation models from DeepSeek AI",
+      "url": "https://huggingface.co/deepseek-ai",
+      "models": [
+        {
+          "id": "deepseek-6.7b",
+          "name": "DeepSeek Coder 6.7B Instruct",
+          "filename": "deepseek-coder-6.7b-instruct.Q4_K_M.gguf",
+          "url": "https://huggingface.co/TheBloke/deepseek-coder-6.7B-instruct-GGUF/resolve/main/deepseek-coder-6.7b-instruct.Q4_K_M.gguf",
+          "size_gb": 3.8,
+          "checksum": "",
+          "capabilities": ["cpu", "cuda", "metal"],
+          "parameters": {
+            "context_length": 16384,
+            "quantization": "Q4_K_M",
+            "parameters": "6.7B"
+          },
+          "recommended_for": ["Mac (Apple Silicon)", "quick tasks", "fallback"]
+        },
+        {
+          "id": "deepseek-33b",
+          "name": "DeepSeek Coder 33B Instruct",
+          "filename": "deepseek-coder-33b-instruct.Q4_K_M.gguf",
+          "url": "https://huggingface.co/TheBloke/deepseek-coder-33B-instruct-GGUF/resolve/main/deepseek-coder-33b-instruct.Q4_K_M.gguf",
+          "size_gb": 18.3,
+          "checksum": "",
+          "capabilities": ["cuda", "cpu"],
+          "parameters": {
+            "context_length": 16384,
+            "quantization": "Q4_K_M",
+            "parameters": "33B"
+          },
+          "recommended_for": ["GPU worker", "primary code generation"]
+        }
+      ]
+    },
+    "deepseek-v2": {
+      "name": "DeepSeek Coder V2",
+      "description": "Latest DeepSeek Coder V2 models with improved performance",
+      "url": "https://huggingface.co/deepseek-ai",
+      "models": [
+        {
+          "id": "deepseek-v2-lite-16b",
+          "name": "DeepSeek Coder V2 Lite 16B Instruct",
+          "filename": "DeepSeek-Coder-V2-Lite-Instruct-Q4_K_M.gguf",
+          "url": "https://huggingface.co/bartowski/DeepSeek-Coder-V2-Lite-Instruct-GGUF/resolve/main/DeepSeek-Coder-V2-Lite-Instruct-Q4_K_M.gguf",
+          "size_gb": 8.9,
+          "checksum": "",
+          "capabilities": ["cuda", "metal", "cpu"],
+          "parameters": {
+            "context_length": 163840,
+            "quantization": "Q4_K_M",
+            "parameters": "16B (2.4B active MoE)"
+          },
+          "recommended_for": ["balanced performance", "long context"]
+        }
+      ]
+    },
+    "qwen": {
+      "name": "Qwen 2.5 Coder",
+      "description": "Alibaba's Qwen 2.5 Coder series - excellent for code generation",
+      "url": "https://huggingface.co/Qwen",
+      "models": [
+        {
+          "id": "qwen-7b",
+          "name": "Qwen 2.5 Coder 7B Instruct",
+          "filename": "Qwen2.5-Coder-7B-Instruct-Q4_K_M.gguf",
+          "url": "https://huggingface.co/bartowski/Qwen2.5-Coder-7B-Instruct-GGUF/resolve/main/Qwen2.5-Coder-7B-Instruct-Q4_K_M.gguf",
+          "size_gb": 4.4,
+          "checksum": "",
+          "capabilities": ["cpu", "cuda", "metal"],
+          "parameters": {
+            "context_length": 131072,
+            "quantization": "Q4_K_M",
+            "parameters": "7B"
+          },
+          "recommended_for": ["Mac (Apple Silicon)", "fast inference"]
+        },
+        {
+          "id": "qwen-14b",
+          "name": "Qwen 2.5 Coder 14B Instruct",
+          "filename": "Qwen2.5-Coder-14B-Instruct-Q4_K_M.gguf",
+          "url": "https://huggingface.co/bartowski/Qwen2.5-Coder-14B-Instruct-GGUF/resolve/main/Qwen2.5-Coder-14B-Instruct-Q4_K_M.gguf",
+          "size_gb": 8.1,
+          "checksum": "",
+          "capabilities": ["cuda", "metal", "cpu"],
+          "parameters": {
+            "context_length": 131072,
+            "quantization": "Q4_K_M",
+            "parameters": "14B"
+          },
+          "recommended_for": ["balanced quality/speed"]
+        },
+        {
+          "id": "qwen-32b",
+          "name": "Qwen 2.5 Coder 32B Instruct",
+          "filename": "Qwen2.5-Coder-32B-Instruct-Q4_K_M.gguf",
+          "url": "https://huggingface.co/bartowski/Qwen2.5-Coder-32B-Instruct-GGUF/resolve/main/Qwen2.5-Coder-32B-Instruct-Q4_K_M.gguf",
+          "size_gb": 18.5,
+          "checksum": "",
+          "capabilities": ["cuda", "cpu"],
+          "parameters": {
+            "context_length": 131072,
+            "quantization": "Q4_K_M",
+            "parameters": "32B"
+          },
+          "recommended_for": ["GPU worker", "high quality output"]
+        }
+      ]
+    },
+    "codellama": {
+      "name": "Code Llama",
+      "description": "Meta's Code Llama models specialized for code",
+      "url": "https://huggingface.co/meta-llama",
+      "models": [
+        {
+          "id": "codellama-7b",
+          "name": "Code Llama 7B Instruct",
+          "filename": "codellama-7b-instruct.Q4_K_M.gguf",
+          "url": "https://huggingface.co/TheBloke/CodeLlama-7B-Instruct-GGUF/resolve/main/codellama-7b-instruct.Q4_K_M.gguf",
+          "size_gb": 4.1,
+          "checksum": "",
+          "capabilities": ["cpu", "cuda", "metal"],
+          "parameters": {
+            "context_length": 16384,
+            "quantization": "Q4_K_M",
+            "parameters": "7B"
+          },
+          "recommended_for": ["quick tasks", "Mac (Apple Silicon)"]
+        },
+        {
+          "id": "codellama-13b",
+          "name": "Code Llama 13B Instruct",
+          "filename": "codellama-13b-instruct.Q4_K_M.gguf",
+          "url": "https://huggingface.co/TheBloke/CodeLlama-13B-Instruct-GGUF/resolve/main/codellama-13b-instruct.Q4_K_M.gguf",
+          "size_gb": 7.9,
+          "checksum": "",
+          "capabilities": ["cuda", "metal", "cpu"],
+          "parameters": {
+            "context_length": 16384,
+            "quantization": "Q4_K_M",
+            "parameters": "13B"
+          },
+          "recommended_for": ["Mac (Apple Silicon)", "good balance"]
+        },
+        {
+          "id": "codellama-34b",
+          "name": "Code Llama 34B Instruct",
+          "filename": "codellama-34b-instruct.Q4_K_M.gguf",
+          "url": "https://huggingface.co/TheBloke/CodeLlama-34B-Instruct-GGUF/resolve/main/codellama-34b-instruct.Q4_K_M.gguf",
+          "size_gb": 19.1,
+          "checksum": "",
+          "capabilities": ["cuda", "cpu"],
+          "parameters": {
+            "context_length": 16384,
+            "quantization": "Q4_K_M",
+            "parameters": "34B"
+          },
+          "recommended_for": ["GPU worker", "complex code"]
+        }
+      ]
+    },
+    "stable-diffusion": {
+      "name": "Stable Diffusion",
+      "description": "Image generation models (requires GPU worker)",
+      "url": "https://huggingface.co/stabilityai",
+      "models": [
+        {
+          "id": "sdxl-base",
+          "name": "Stable Diffusion XL Base 1.0",
+          "filename": "sd_xl_base_1.0.safetensors",
+          "url": "https://huggingface.co/stabilityai/stable-diffusion-xl-base-1.0/resolve/main/sd_xl_base_1.0.safetensors",
+          "size_gb": 6.9,
+          "checksum": "",
+          "capabilities": ["cuda"],
+          "type": "image",
+          "parameters": {
+            "resolution": "1024x1024",
+            "base_model": "SDXL 1.0"
+          },
+          "recommended_for": ["GPU worker", "image generation"]
+        },
+        {
+          "id": "sdxl-refiner",
+          "name": "Stable Diffusion XL Refiner 1.0",
+          "filename": "sd_xl_refiner_1.0.safetensors",
+          "url": "https://huggingface.co/stabilityai/stable-diffusion-xl-refiner-1.0/resolve/main/sd_xl_refiner_1.0.safetensors",
+          "size_gb": 6.1,
+          "checksum": "",
+          "capabilities": ["cuda"],
+          "type": "image",
+          "parameters": {
+            "resolution": "1024x1024",
+            "base_model": "SDXL 1.0 Refiner"
+          },
+          "recommended_for": ["GPU worker", "high quality refinement"]
+        }
+      ]
+    }
+  },
+  "recommended": {
+    "primary_code": "qwen-32b",
+    "fallback_code": "qwen-7b",
+    "quick_code": "deepseek-6.7b",
+    "image": "sdxl-base"
+  },
+  "hardware_recommendations": {
+    "gpu_worker": {
+      "description": "NVIDIA GPU worker (8GB+ VRAM, 32GB+ RAM)",
+      "primary": ["qwen-32b", "deepseek-33b", "codellama-34b"],
+      "image": ["sdxl-base", "sdxl-refiner"]
+    },
+    "cpu_worker": {
+      "description": "CPU-only worker (64GB+ RAM)",
+      "primary": ["qwen-32b", "deepseek-33b"],
+      "note": "CPU inference - slower but works with large models"
+    },
+    "mac_worker": {
+      "description": "Apple Silicon Mac (16GB+ unified memory)",
+      "primary": ["qwen-7b", "deepseek-6.7b", "codellama-7b"],
+      "max_model": "qwen-14b"
+    }
+  }
+}

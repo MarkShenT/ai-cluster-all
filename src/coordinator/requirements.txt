@@ -1,0 +1,29 @@
+# AI Cluster Coordinator - Python Dependencies
+
+# Web Framework
+Flask==3.0.0
+Flask-SocketIO==5.3.6
+flask-cors==4.0.0
+
+# Database
+SQLAlchemy==2.0.23
+alembic==1.13.0
+
+# Redis (Job Queue)
+redis==5.0.1
+rq==1.15.1
+
+# HTTP Client (for model downloads)
+requests==2.31.0
+huggingface-hub==0.20.1
+
+# WebSocket
+python-socketio==5.10.0
+eventlet==0.34.2
+
+# Utilities
+python-dotenv==1.0.0
+psutil==5.9.7
+
+# Production WSGI
+gunicorn==21.2.0
