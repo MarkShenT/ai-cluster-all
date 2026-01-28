@@ -5,21 +5,26 @@ updates:
     schedule:
       interval: "weekly"
     target-branch: "develop"
-
-  - package-ecosystem: "pip"
-    directory: "/src/worker"
-    schedule:
-      interval: "weekly"
-    target-branch: "develop"
+    open-pull-requests-limit: 1
+    groups:
+      python-deps:
+        patterns:
+          - "*"
 
   - package-ecosystem: "npm"
     directory: "/src/frontend"
     schedule:
       interval: "weekly"
     target-branch: "develop"
+    open-pull-requests-limit: 1
+    groups:
+      npm-deps:
+        patterns:
+          - "*"
 
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
       interval: "weekly"
     target-branch: "develop"
+    open-pull-requests-limit: 1
