@@ -1,0 +1,25 @@
+version: 2
+updates:
+  - package-ecosystem: "pip"
+    directory: "/src/coordinator"
+    schedule:
+      interval: "weekly"
+    target-branch: "develop"
+
+  - package-ecosystem: "pip"
+    directory: "/src/worker"
+    schedule:
+      interval: "weekly"
+    target-branch: "develop"
+
+  - package-ecosystem: "npm"
+    directory: "/src/frontend"
+    schedule:
+      interval: "weekly"
+    target-branch: "develop"
+
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    target-branch: "develop"
