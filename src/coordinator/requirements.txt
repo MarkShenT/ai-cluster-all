@@ -22,7 +22,7 @@ python-socketio==5.10.0
 eventlet==0.34.2
 
 # Utilities
-python-dotenv==1.0.0
+python-dotenv==1.2.1
 psutil==5.9.7
 
 # Production WSGI
