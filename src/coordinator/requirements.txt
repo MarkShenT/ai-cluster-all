@@ -23,7 +23,7 @@ eventlet==0.40.3
 
 # Utilities
 python-dotenv==1.0.0
-psutil==5.9.7
+psutil==7.2.1
 
 # Production WSGI
 gunicorn==22.0.0
