@@ -19,7 +19,7 @@ huggingface-hub==0.20.1
 
 # WebSocket
 python-socketio==5.10.0
-eventlet==0.34.2
+eventlet==0.40.4
 
 # Utilities
 python-dotenv==1.0.0
