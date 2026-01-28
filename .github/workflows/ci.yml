@@ -1,0 +1,67 @@
+# AI Cluster - Continuous Integration
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  test:
+    name: Tests
+    runs-on: ubuntu-latest
+
+    services:
+      redis:
+        image: redis:7-alpine
+        ports:
+          - 6379:6379
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install Python dependencies
+        run: |
+          pip install -r src/coordinator/requirements.txt
+          pip install -r src/worker/requirements.txt
+          pip install pytest pytest-cov
+
+      - name: Run Python tests
+        env:
+          REDIS_URL: redis://localhost:6379
+          AUTH_DISABLED: 'true'
+          MODELS_PATH: /tmp/models
+          RESULTS_PATH: /tmp/results
+          PROJECTS_PATH: /tmp/projects
+        run: |
+          mkdir -p /tmp/models /tmp/results /tmp/projects
+          pytest tests/ -v
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Build frontend
+        working-directory: src/frontend
+        run: |
+          npm install
+          npm run build
+
+  docker:
+    name: Docker Build
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build images
+        run: |
+          docker build -t ai-cluster-coordinator ./src/coordinator
+          docker build -t ai-cluster-frontend ./src/frontend

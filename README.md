@@ -147,6 +147,59 @@ API_KEY=your-api-key-from-coordinator
 
 - **[QUICK-START.md](QUICK-START.md)** - Detailed setup guide with troubleshooting
 
+## Development
+
+### Running Tests
+
+**Backend (Python):**
+```bash
+# Install test dependencies
+pip install pytest pytest-cov httpx
+
+# Run coordinator tests
+pytest tests/coordinator/ -v
+
+# Run worker tests
+pytest tests/worker/ -v
+
+# Run with coverage
+pytest tests/ --cov=src --cov-report=html
+```
+
+**Frontend (JavaScript):**
+```bash
+cd src/frontend
+
+# Install dependencies
+npm install
+
+# Run tests
+npm test
+
+# Run tests with coverage
+npm run test:coverage
+```
+
+### CI/CD
+
+GitHub Actions runs on push/PR to main (`ci.yml`):
+- Python tests (coordinator + worker)
+- Frontend build
+- Docker image builds
+
+### Code Quality
+
+```bash
+# Python linting
+pip install flake8 black isort
+black --check src/ tests/
+isort --check-only src/ tests/
+flake8 src/ tests/ --max-line-length=120
+
+# Frontend linting
+cd src/frontend && npm run lint
+```
+
 ## Monitor Dashboard
 
 Deploy a lightweight monitoring dashboard on Pi 5:
