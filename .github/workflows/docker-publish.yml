@@ -52,7 +52,7 @@ jobs:
             type=sha
 
       - name: Build and push coordinator image
-        uses: docker/build-push-action@v5
+        uses: docker/build-push-action@v6
         with:
           context: ./src/coordinator
           platforms: linux/amd64,linux/arm64
@@ -73,7 +73,7 @@ jobs:
             type=sha
 
       - name: Build and push frontend image
-        uses: docker/build-push-action@v5
+        uses: docker/build-push-action@v6
         with:
           context: ./src/frontend
           platforms: linux/amd64,linux/arm64
