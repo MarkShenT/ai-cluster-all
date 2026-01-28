@@ -1,5 +1,9 @@
 # AI Cluster
 
+[![CI](https://github.com/USERNAME/ai-cluster-all/actions/workflows/ci.yml/badge.svg)](https://github.com/USERNAME/ai-cluster-all/actions/workflows/ci.yml)
+[![CodeQL](https://github.com/USERNAME/ai-cluster-all/actions/workflows/codeql.yml/badge.svg)](https://github.com/USERNAME/ai-cluster-all/actions/workflows/codeql.yml)
+[![License](https://img.shields.io/badge/License-AGPL%203.0-blue.svg)](LICENSE)
+
 A distributed AI inference system for local code generation and image generation using heterogeneous hardware. Built for Proxmox clusters with support for Windows (CUDA), macOS (Metal), and Linux workers.
 
 ## Features
@@ -146,6 +150,68 @@ API_KEY=your-api-key-from-coordinator
 ## Documentation
 
 - **[QUICK-START.md](QUICK-START.md)** - Detailed setup guide with troubleshooting
+
+## Development
+
+### Running Tests
+
+**Backend (Python):**
+```bash
+# Install test dependencies
+pip install pytest pytest-cov httpx
+
+# Run coordinator tests
+pytest tests/coordinator/ -v
+
+# Run worker tests
+pytest tests/worker/ -v
+
+# Run with coverage
+pytest tests/ --cov=src --cov-report=html
+```
+
+**Frontend (JavaScript):**
+```bash
+cd src/frontend
+
+# Install dependencies
+npm install
+
+# Run tests
+npm test
+
+# Run tests with coverage
+npm run test:coverage
+```
+
+### CI/CD
+
+This project uses GitHub Actions for continuous integration:
+
+- **CI Workflow** (`ci.yml`) - Runs on all pushes and PRs to main:
+  - Python tests for coordinator and worker
+  - Frontend build and lint
+  - Docker image build verification
+  - Security scanning with Bandit
+
+- **Docker Publish** (`docker-publish.yml`) - Builds and publishes Docker images on release tags
+
+- **CodeQL Analysis** (`codeql.yml`) - Weekly security vulnerability scanning
+
+- **Dependabot** - Automated dependency updates for Python, npm, Docker, and GitHub Actions
+
+### Code Quality
+
+```bash
+# Python linting
+pip install flake8 black isort
+black --check src/ tests/
+isort --check-only src/ tests/
+flake8 src/ tests/ --max-line-length=120
+
+# Frontend linting
+cd src/frontend && npm run lint
+```
 
 ## Monitor Dashboard
 

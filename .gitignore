@@ -124,6 +124,7 @@ temp/
 # Test & Coverage
 #-------------------------------------------------------------------------------
 coverage/
+coverage.xml
 .nyc_output/
 test-results/
 junit.xml
