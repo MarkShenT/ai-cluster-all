@@ -18,7 +18,7 @@ requests==2.32.4
 huggingface-hub==0.20.1
 
 # WebSocket
-python-socketio==5.14.0
+python-socketio==5.16.0
 eventlet==0.40.3
 
 # Utilities
